@@ -29,7 +29,7 @@ class ShoppingList
     {
         int sum = 0;
 
-        for (int i = 1; i < items.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             sum += items[i].Price;
         }
