@@ -27,14 +27,18 @@ while (true)
 
     if (choice == 1)
     {
-        string filePath = "items.txt";
         Console.Write("Namn: ");
         string name = Console.ReadLine();
         Console.Write("Pris: ");
-        int price = int.Parse(Console.ReadLine());
-        list.Add(new Item(name, price));
+        bool priceSuccess = int.TryParse(Console.ReadLine(), out int price);
 
-        File.AppendAllText(filePath, $"\n{price};{name}");
+        if (priceSuccess == false || price <= 0)
+        {
+            Console.WriteLine("Felaktig inmatning");
+            Console.ReadLine();
+            continue;
+        }
+        list.Add(new Item(name, price));
     }
     else if (choice == 2)
     {

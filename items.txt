@@ -5,3 +5,4 @@
 15;läsk
 25;Chips
 99;Pizza
+80;Kaffe
