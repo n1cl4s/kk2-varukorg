@@ -74,12 +74,14 @@ class ShoppingList
         try
         {
             File.WriteAllText(path, string.Join("\r\n", lines) + "\r\n");
+            Console.WriteLine("Listan är sparad.");
         }
         catch
         {
+            Console.WriteLine("Kunde inte spara listan.");
         }
 
-        Console.WriteLine("Listan är sparad.");
+        
     }
 
     // Reads the file back into the list.
