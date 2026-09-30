@@ -43,7 +43,7 @@ while (true)
         // Försöker lägga till i listan
         try
         {
-             // Om det blir mer en budget så läggs inte varan till, annars skickas man tillbaka till menyn
+             // Om det blir mer än budget så läggs inte varan till, annars skickas man tillbaka till menyn
             bool added = list.Add(new Item(name, price));
         
             if (added == false)

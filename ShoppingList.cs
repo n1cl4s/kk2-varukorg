@@ -92,7 +92,7 @@ class ShoppingList
             Console.WriteLine("Listan är sparad.");
         }
         // Om items.txt är skrivskyddad får man ett felmeddelande
-        catch
+        catch (UnauthorizedAccessException)
         {
             Console.WriteLine("Kunde inte spara listan.");
         }
