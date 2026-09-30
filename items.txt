@@ -1,3 +1,6 @@
 15;Mjölk
 32;Bröd
 89;Ost
+2;choklad
+15;läsk
+25;Chips

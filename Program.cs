@@ -1,6 +1,6 @@
 ShoppingList list = new ShoppingList("items.txt");
 
-
+// Felsökning så att inte programmet kraschar om inte items.txt finns.
 try
 {
     File.ReadAllText("items.txt");
@@ -27,11 +27,14 @@ while (true)
 
     if (choice == 1)
     {
+        string filePath = "items.txt";
         Console.Write("Namn: ");
         string name = Console.ReadLine();
         Console.Write("Pris: ");
         int price = int.Parse(Console.ReadLine());
         list.Add(new Item(name, price));
+
+        File.AppendAllText(filePath, $"\n{price};{name}");
     }
     else if (choice == 2)
     {
