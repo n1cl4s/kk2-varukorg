@@ -4,6 +4,7 @@ class ShoppingList
     private List<Item> items = new List<Item>();
     private string path;
 
+    // Kollar så att varan finns
     public int Count => items.Count;
 
 

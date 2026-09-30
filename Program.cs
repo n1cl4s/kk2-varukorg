@@ -1,6 +1,15 @@
 ShoppingList list = new ShoppingList("items.txt");
-list.Load();
 
+
+try
+{
+    File.ReadAllText("items.txt");
+    list.Load();
+}
+catch (FileNotFoundException ex)
+{
+    Console.WriteLine($"Filen kunde inte hittas: {ex.FileName}");
+}
 while (true)
 {
     Console.WriteLine();
