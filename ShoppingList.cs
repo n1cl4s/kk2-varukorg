@@ -71,11 +71,14 @@ class ShoppingList
             lines.Add($"{item.Price};{item.Name}");
         }
 
+
+        // Sparar i listan
         try
         {
             File.WriteAllText(path, string.Join("\r\n", lines) + "\r\n");
             Console.WriteLine("Listan är sparad.");
         }
+        // Om filen är skrivskyddad får man ett felmeddelande
         catch
         {
             Console.WriteLine("Kunde inte spara listan.");
