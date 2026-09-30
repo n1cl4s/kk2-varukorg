@@ -33,7 +33,7 @@ while (true)
          // Identifierar varan
         int index = number -1;
     
-    // Om numret är ogiltligt eller finns inte så kraschar inte programmet
+    // Om numret är ogiltligt eller finns inte så kraschar inte
     if (!removeSuccess || index < 0 || index >= list.Count)
         {
             Console.WriteLine("Ogilitigt nummer. Tryck enter för att komma till menyn");

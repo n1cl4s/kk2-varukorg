@@ -4,7 +4,7 @@ class ShoppingList
     private List<Item> items = new List<Item>();
     private string path;
 
-    public int Count { get; internal set; }
+    public int Count => items.Count;
 
 
     public ShoppingList(string path)
