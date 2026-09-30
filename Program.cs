@@ -32,13 +32,27 @@ while (true)
         Console.Write("Pris: ");
         bool priceSuccess = int.TryParse(Console.ReadLine(), out int price);
 
+        // kollar så inmatning är rätt samt inte mindre än 0.
         if (priceSuccess == false || price <= 0)
         {
             Console.WriteLine("Felaktig inmatning");
             Console.ReadLine();
             continue;
         }
-        list.Add(new Item(name, price));
+
+        // Försöker lägga till i listan
+        try
+        {
+            list.Add(new Item(name, price));
+        }
+
+        // Tomt fält, no problemo
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.ReadLine();
+        }
+
     }
     else if (choice == 2)
     {
