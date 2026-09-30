@@ -4,6 +4,9 @@ class ShoppingList
     private List<Item> items = new List<Item>();
     private string path;
 
+    public int Count { get; internal set; }
+
+
     public ShoppingList(string path)
     {
         this.path = path;
