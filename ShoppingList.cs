@@ -4,18 +4,31 @@ class ShoppingList
     private List<Item> items = new List<Item>();
     private string path;
 
+    private int budget;
+    public int Budget => budget;
+
     // Kollar så att varan finns
     public int Count => items.Count;
 
 
-    public ShoppingList(string path)
+    public ShoppingList(string path, int budget)
     {
         this.path = path;
+        this.budget = budget;
     }
 
-    public void Add(Item item)
+    // Om varan som läggs till + varorna som redan är i listan överskrider budgeten, så läggs inte varan till.
+    // Jag valde bool i stället för throw eftersom det bli mindre och smidigare kod.
+    // Med hjälp av if-satsen så täcker det in alla (förhoppningsvis) fel utan att krascha
+    public bool Add(Item item)
     {
+        if (Total() + item.Price > budget)
+        {
+            return false;
+        }
+
         items.Add(item);
+        return true;
     }
 
     // Removes the item the user sees as number 1, 2, 3 ...

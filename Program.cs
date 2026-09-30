@@ -1,4 +1,4 @@
-ShoppingList list = new ShoppingList("items.txt");
+ShoppingList list = new ShoppingList("items.txt", 400);
 
 // Felsökning så att inte programmet kraschar om inte items.txt finns.
 try
@@ -43,7 +43,14 @@ while (true)
         // Försöker lägga till i listan
         try
         {
-            list.Add(new Item(name, price));
+             // Om det blir mer en budget så läggs inte varan till, annars skickas man tillbaka till menyn
+            bool added = list.Add(new Item(name, price));
+        
+            if (added == false)
+            {
+               Console.WriteLine($"Du är över budget: {list.Budget}, så din vara lades inte till");
+               Console.ReadLine();
+            }
         }
 
         // Tomt fält, no problemo

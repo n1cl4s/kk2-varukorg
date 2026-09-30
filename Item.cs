@@ -6,10 +6,13 @@ class Item
 
     public Item(string name, int price)
     {
+        // Om användaren matar in inget namn men pris
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException ("Du måste ange ett namn på varan");
         }
+
+        // Om användaren matar in negativt tal
         if (price <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(price), "Priset kan inte vara negativt");
