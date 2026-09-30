@@ -4,3 +4,4 @@
 2;choklad
 15;läsk
 25;Chips
+99;Pizza
