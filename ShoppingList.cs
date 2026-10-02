@@ -7,10 +7,10 @@ class ShoppingList
     // Om items.txt inte kan läsas så är budgeten 500. Annars läses den från items.txt. Detta för programmet ska kunna köras utan items.txt
     private int budget = 500;
     
-    // Gör summan på budgeten public så den kan skrivas ut
+    // Låter Program.cs läsa budgeten men inte ändra den.
     public int Budget => budget;
 
-    // Kollar så att varan finns
+    // Kollar antalet varor i listan
     public int Count => items.Count;
 
 
@@ -20,8 +20,8 @@ class ShoppingList
     }
 
     // Om varan som läggs till + varorna som redan är i listan överskrider budgeten, så läggs inte varan till.
-    // Jag valde bool i stället för throw eftersom det bli mindre och smidigare kod.
-    // Med hjälp av if-satsen så täcker det in alla (förhoppningsvis) fel utan att krascha
+    // Jag valde bool i stället för throw eftersom det blir mindre och smidigare kod.
+    // Med hjälp av if-satsen så kontrollerar den budgeten.
     public bool Add(Item item)
     {
         if (Total() + item.Price > budget)
@@ -76,11 +76,10 @@ class ShoppingList
         Console.WriteLine($"Totalt: {Total()} kr");
     }
 
-    // Writes one item per line, as "price;name".
     public void Save()
     {
         List<string> lines = new List<string>();
-        // Skriver tillbaka budgeten i programmet
+        // Skriver budget först, så att det inte försvinner ur filen när den sparas.
         lines.Add($"budget;{budget}");
 
         foreach (Item item in items)

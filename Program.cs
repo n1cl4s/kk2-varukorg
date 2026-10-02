@@ -1,6 +1,6 @@
 ShoppingList list = new ShoppingList("items.txt");
 
-// Felsökning så att inte programmet kraschar om inte items.txt finns.
+// Felhantering så att inte programmet kraschar om items.txt saknas.
 try
 {
     File.ReadAllText("items.txt");
@@ -43,7 +43,7 @@ while (true)
         // Försöker lägga till i listan
         try
         {
-             // Om det blir mer än budget så läggs inte varan till, annars skickas man tillbaka till menyn
+             // Om det blir mer än budget så läggs inte varan till.
             bool added = list.Add(new Item(name, price));
         
             if (added == false)
@@ -53,7 +53,7 @@ while (true)
             }
         }
 
-        // Tomt fält, no problemo
+        // Fångar in tom inmatning samt pris som är 0 eller lägre
         catch (ArgumentException ex)
         {
             Console.WriteLine(ex.Message);
@@ -70,7 +70,7 @@ while (true)
          // Identifierar varan
         int index = number -1;
     
-    // Om numret är ogiltligt eller finns inte så kraschar inte
+    // Stoppar nummer och bokstäver som inte finns i listan
     if (!removeSuccess || index < 0 || index >= list.Count)
         {
             Console.WriteLine("Ogilitigt nummer. Tryck enter för att komma till menyn");
