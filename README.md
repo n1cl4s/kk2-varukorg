@@ -64,7 +64,7 @@ classDiagram
         -int budget
         +int Budget
         +int Count
-        +ShoppingList(path, budget)
+        +ShoppingList(path)
         +bool Add()
         +void RemoveAt()
         +int Total()

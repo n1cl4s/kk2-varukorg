@@ -4,17 +4,19 @@ class ShoppingList
     private List<Item> items = new List<Item>();
     private string path;
 
-    private int budget;
+    // Om items.txt inte kan läsas så är budgeten 500. Annars läses den från items.txt. Detta för programmet ska kunna köras utan items.txt
+    private int budget = 500;
+    
+    // Gör summan på budgeten public så den kan skrivas ut
     public int Budget => budget;
 
     // Kollar så att varan finns
     public int Count => items.Count;
 
 
-    public ShoppingList(string path, int budget)
+    public ShoppingList(string path)
     {
         this.path = path;
-        this.budget = budget;
     }
 
     // Om varan som läggs till + varorna som redan är i listan överskrider budgeten, så läggs inte varan till.
@@ -78,6 +80,8 @@ class ShoppingList
     public void Save()
     {
         List<string> lines = new List<string>();
+        // Skriver tillbaka budgeten i programmet
+        lines.Add($"budget;{budget}");
 
         foreach (Item item in items)
         {
@@ -108,7 +112,20 @@ class ShoppingList
         foreach (string line in lines)
         {
             string[] parts = line.Split(';');
+
+            if (parts[0] == "budget")
+            {
+                if (int.TryParse(parts[1], out int fileBudget))
+                {
+                    budget = fileBudget;
+                }
+                continue;
+
+            }
+
             items.Add(new Item(parts[1], int.Parse(parts[0])));
+
+            
         }
     }
 }
