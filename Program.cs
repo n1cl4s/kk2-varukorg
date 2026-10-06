@@ -1,9 +1,9 @@
+// Sökvägen till varorna.
 ShoppingList list = new ShoppingList("items.txt");
 
 // Felhantering så att inte programmet kraschar om items.txt saknas.
 try
 {
-    File.ReadAllText("items.txt");
     list.Load();
 }
 catch (FileNotFoundException ex)
@@ -110,4 +110,5 @@ while (true)
     {
         break;
     }
+
 }
