@@ -24,7 +24,7 @@ class ShoppingList
     // Med hjälp av if-satsen så kontrollerar den budgeten.
     public bool Add(Item item)
     {
-        if (Total() + item.Price > budget)
+        if (item.Price > budget - Total())
         {
             return false;
         }
