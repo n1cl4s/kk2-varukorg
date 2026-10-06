@@ -32,10 +32,10 @@ while (true)
         Console.Write("Pris: ");
         bool priceSuccess = int.TryParse(Console.ReadLine(), out int price);
 
-        // kollar så inmatning är rätt samt inte mindre än 0.
-        if (priceSuccess == false || price <= 0)
+        // kollar så inmatning är ett heltal
+        if (priceSuccess == false)
         {
-            Console.WriteLine("Felaktig inmatning");
+            Console.WriteLine("Felaktig inmatning. Det måste vara ett heltal");
             Console.ReadLine();
             continue;
         }
@@ -53,7 +53,13 @@ while (true)
             }
         }
 
-        // Fångar in tom inmatning samt pris som är 0 eller lägre
+        catch (ArgumentOutOfRangeException)
+        {
+            Console.WriteLine("Felaktig inmatning. Negativt pris");
+            Console.ReadLine();
+        }
+
+        // Fångar in tom inmatning
         catch (ArgumentException ex)
         {
             Console.WriteLine(ex.Message);
