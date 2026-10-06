@@ -13,7 +13,7 @@ class Item
             throw new ArgumentException ("Du måste ange ett namn på varan");
         }
 
-        // Måste vara ett positivt värde på priset
+        // Får inte vara ett negativt värde
         if (price < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(price), "Priset kan inte vara negativt");
