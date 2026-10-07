@@ -68,16 +68,15 @@ while (true)
     else if (choice == 2)
     {
         Console.Write("Nummer: ");
-        // Läser in vilken vara som ska tas bort (nummer)
-        bool removeSuccess = int.TryParse(Console.ReadLine(), out int number);      
+        // Läser in vilken vara som ska tas bort (nummer) och skyddar mot kraschar om det blir fel inmatning
+        int.TryParse(Console.ReadLine(), out int number);
 
-         // Identifierar varan
-        int index = number -1;
-    
-    // Stoppar nummer och bokstäver som inte finns i listan
-    if (!removeSuccess || index < 0 || index >= list.Count)
+        // Skriver anvädnaren 1 blir det 1an på listan i terminalen. Som egentligen är 0 i en lista. 
+        int index = number - 1;
+
+        if (index < 0 || index >= list.Count)
         {
-            Console.WriteLine("Ogilitigt nummer. Tryck enter för att komma till menyn");
+            Console.WriteLine("Ogiltigt nummer. Tryck enter för att komma till menyn");
             Console.ReadLine();
             continue;
         }
