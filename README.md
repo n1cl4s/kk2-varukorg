@@ -1,35 +1,197 @@
 
 # Felrapport
 
-## Fel 1 – Tom rad i Load
-Programmet kraschade när det startade. Först kollade jag var i koden som felmeddelandet pekade på. Det såg ut som att items.txt hade en tom rad, så jag tog bort den och då kunde jag köra programmet. Men sen kraschade programmet igen när man sparade och startade om.
+## Fel – Tom rad i Load
+1. Starta programmet
+2. Programmet kraschar direkt
 
-Då förstod jag att felet låg i koden och inte i filen. Load använde File.ReadAllText och text.Split('\n'), och det gjorde att radbrytningen i slutet av filen blev en tom rad.
+   at ShoppingList.Load() in C:\Users\nicla\Downloads\kk2-startkod-main\kk2-startkod-main\ShoppingList.cs:line 90
+   at Program.<Main>$(String[] args) in C:\Users\nicla\Downloads\kk2-startkod-main\kk2-startkod-main\Program.cs:line 2
 
-Jag ändrade så att Load använder File.ReadAllLines istället, som läser rad för rad, och tog bort text.Split. Detta gjorde också att titlarna på alla varor syntes och att sökningen hittade dem, för innan låg det kvar ett \r i slutet av varje namn.
+### Åtgärd
+Den tomma raden i slutet gjorde att det kraschade,  för price var int.Parse som inte kan ta emot tom sträng.
+Tog bort tom rad i slutet på items.txt som tog bort problemet tillfälligt så jag kunde köra programmet.
+Därefter så läggde jag till en kontroll i Load() i ShoppingList.cs som hoppar över tomma rader.
 
-## Fel 2 – Bokstäver i menyn, priset eller numret
-Programmet kraschade om man skrev in en bokstav istället för en siffra. Det gällde menyvalet, priset och numret när man tar bort en vara. Felet var att alla tre använde int.Parse, som kraschar om det inte är en siffra.
+    if (string.IsNullOrWhiteSpace(line)) continue;
 
-price och number behöver vara en TryParse med bool så att programmet inte kraschar om man skriver in bokstäver. Om det inte är en siffra får man ett felmeddelande istället. För choice (menyval) räckte det med en int.TryParse och där visades inget felmeddelande utan användaren får en ny chans att mata in en annan siffra.
+Så nu om mot förmodan en tom rad kommer int så kraschar inte programmet
 
-## Fel 3 – Ta bort ett nummer som inte finns
-Programmet kraschade om man skrev ett nummer som inte fanns i listan när man skulle ta bort en vara, t.ex. 0, ett negativt tal eller ett högre nummer än antal varor som finns. Felet var att RemoveAt aldrig kollade om numret fanns.
 
-Jag lade till ett villkor som kollar att numret är mellan 1 och antalet varor i listan. Om det inte är så, får man ett felmeddelande istället.
+## Fel - Programmet kraschar vid start efter att man har sparat
+1. Starta programmet
+2. Lägg till vara
+3. Ange ett namn i bokstäver och ett pris i heltal
+4. Spara
+5. Avsluta programmet
+6. Starta programmet igen
+7. Programmet kraschar
 
-## Fel 4 – Om items.txt saknas
-Programmet kraschade direkt när det startade om items.txt inte fanns. Felet var att Load försökte läsa filen ändå, och då blev det undantaget FileNotFoundException.
+   at ShoppingList.Load() in C:\Users\nicla\Downloads\kk2-startkod-main\kk2-startkod-main\ShoppingList.cs:line 90
+   at Program.<Main>$(String[] args) in C:\Users\nicla\Downloads\kk2-startkod-main\kk2-startkod-main\Program.cs:line 2
 
-Jag fixade Program.cs så att Load ligger i en try/catch. Om filen finns så laddas listan, annars får man ett felmeddelande att filen inte kunde hittas. Programmet startar då med en tom lista istället för att krascha.
+### Åtgärd
+ShoppingList.cs rad 89-90
+        string text = File.ReadAllText(path);
+        string[] lines = text.Split('\n');
 
-## Fel 5 – Totalsumman blev fel
-Totalpriset blev fel för första varan på listan räknades inte med. Det var för att for-loopen började på 1, men listan börjar på 0.
-Ändrade for-loopen så den börjar på 0 istället för 1 i ShoppingList.cs under Total() så att alla varor på listan räknades med i totalpriset.
+Load() läste in filen som en text i stället för rader. Därför behövdes split innan för att det skulle bli rader.
+Save skrev en radbrytning efter varje rad, även den sista.
+Efter sista radbrytningen blev det en tom rad, och int.Parse kraschade på den (samma som Fel 1).
 
-## Fel 6 – Sparandet misslyckades utan att man fick veta det
-Ändrade i ShoppingList.cs genom att flytta in "Listan är sparad." i try och att det blev felmeddelande om listan inte kunde sparas (skrivskyddad).
-Innan om sparandet misslyckades så fick användaren aldrig reda på det. Catch var tom så felet syntes inte.
+Byttes till
+        string[] lines = File.ReadAllLines(path);
+
+ReadAllLines delar själv upp så att varje inmatning pris;namn blir en rad och då inte tar med en tom rad som stökar till det.
+
+
+## Fel - Första varans titel syns inte i varukorgen
+1. Starta programmet
+2. Varukorgen visas med namn och pris för alla varor förutom första som visar bara pris och tom titel.
+
+### Åtgärd
+Det blev två flugor i en smäll. Detta löstes när jag ändrade ReadAllText till ReadAllLines och tog bort text.Split i ShoppingList.cs (se föregående fel).
+
+
+## Fel - Totalsumman blir fel
+1. Starta programmet
+2. Lägg till vara
+3. Ange korrekt inmatning för namn och pris
+4. Upprepa 4 gånger
+5. Räkna ihop priserna manuellt i kalkylatorn och jämför med totalsumman i programmet
+6. Totalsumman är för låg för att första varans pris räknas inte med
+
+### Åtgärd
+for-loopen hade fel startnummer (1), så första varan räknades inte med. I en lista så är första inmatningen 0.
+
+        for (int i = 1; i < items.Count; i++)
+Byttes till
+        for (int i = 0; i < items.Count; i++)
+
+
+## Fel – Menykrasch vid tom inmatning och bokstäver
+1. Starta programmet
+2. Skriv in en bokstav och tryck enter
+3. Programmet kraschar
+
+1. Starta programmet
+2. Tryck enter
+3. Programmet kraschar
+
+   Unhandled exception. System.FormatException: The input string 'm' was not in a correct format.
+   at System.Number.ThrowFormatException[TChar](ReadOnlySpan`1 value)
+   at System.Int32.Parse(String s)
+   at Program.<Main>$(String[] args) in C:\Users\nicla\Downloads\kk2-startkod-main\kk2-startkod-main\Program.cs:line 16
+
+### Åtgärd
+choice (menyval) i Program.cs rad 16 var en int.Parse, som kraschar om inmatningen inte är ett heltal.
+
+Byttes till
+        int.TryParse(Console.ReadLine(), out int choice);
+
+TryParse kraschar inte om inmatningen är en bokstav eller tom blir choice 0. Inget menyval har nummer 0, så menyn visas igen och användaren får försöka på nytt.
+
+
+## Fel - Lägga till vara utan pris innebär krasch
+1. Starta programmet
+2. Välj lägg till vara
+3. Skriv valfritt namn, tryck enter, sen tryck enter igen.
+4. Programmet kraschar
+
+### Åtgärd
+I Program.cs så deklareras pris med int.Parse. Precis som i föregående fel så kraschade det vid felaktiga inmatningar.
+Byttes till !int.TryParse så om inmatningen inte är ett heltal visas ett felmeddelande och continue skickar användaren tillbaka till menyn.
+
+       if (!int.TryParse(Console.ReadLine(), out int price))
+        {
+            Console.WriteLine("Felaktig inmatning. Det måste vara ett heltal");
+            Console.ReadLine();
+            continue;
+        }
+
+
+## Fel – Ta bort vara med bokstäver eller tom inmatning
+1. Starta programmet
+2. Välj ta bort vara
+3. Skriv en bokstav istället för en siffra, eller tryck bara enter
+4. Programmet kraschar
+
+   Unhandled exception. System.FormatException: The input string 'a' was not in a correct format.
+   at System.Int32.Parse(String s)
+
+### Åtgärd
+Programmet kraschade om man skrev in en bokstav istället för en siffra när man skulle ta bort en vara. Felet var att numret lästes in med int.Parse, som kraschar om det inte är en siffra.
+
+number behövde läsas in av TryParse så att programmet inte kraschar om man skriver in bokstäver eller tom inmatning.
+
+        int.TryParse(Console.ReadLine(), out int number);
+
+        int index = number - 1;
+
+        if (index < 0 || index >= list.Count)
+        {
+            Console.WriteLine("Ogiltigt nummer. Tryck enter för att komma till menyn");
+            Console.ReadLine();
+            continue;
+        }
+
+
+## Fel – Ta bort vara med ett nummer som inte finns
+1. Starta programmet
+2. Välj ta bort vara
+3. Skriv 0, ett negativt tal eller ett högre nummer än antal varor
+4. Programmet kraschar
+
+   Unhandled exception. System.ArgumentOutOfRangeException: Index was out of range.
+
+### Åtgärd
+RemoveAt kollade aldrig om numret fanns i listan. Löstes med samma if-sats som i föregående fel.
+
+        if (index < 0 || index >= list.Count)  
+
+
+## Fel – Programmet kraschar om items.txt saknas
+1. Ta bort eller byt namn på items.txt
+2. Starta programmet
+3. Programmet kraschar direkt
+
+   Unhandled exception. System.IO.FileNotFoundException: Could not find file 'items.txt'.
+
+### Åtgärd
+Load försökte läsa filen även om den inte fanns. Lade Load i en try/catch i Program.cs.
+
+        try
+        {
+            list.Load();
+        }
+        catch (FileNotFoundException ex)
+        {
+            Console.WriteLine($"Filen kunde inte hittas: {ex.FileName}");
+        }
+
+Programmet startar då med en tom lista istället för att krascha.
+
+
+## Fel – Sparandet misslyckas utan att man får veta det
+1. Högerklicka på items.txt, välj Egenskaper och kryssa i Skrivskyddad
+2. Starta programmet
+3. Välj spara
+4. Programmet skriver "Listan är sparad." men inget sparas
+
+### Åtgärd
+Catch i Save() i ShoppingList.cs var tom, så felet syntes inte. "Listan är sparad." låg utanför try och visades även när det misslyckades.
+
+Flyttade in "Listan är sparad." i try och lade till ett felmeddelande i catch.
+
+        try
+        {
+            File.WriteAllText(path, string.Join("\r\n", lines) + "\r\n");
+            Console.WriteLine("Listan är sparad.");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Console.WriteLine("Kunde inte spara listan.");
+        }
 
 <br>
 <br>
@@ -38,18 +200,16 @@ Innan om sparandet misslyckades så fick användaren aldrig reda på det. Catch 
 # Del 2
 
 ## Designval
-Add-metoden i ShoppingList.cs räknar ut hur mycket som är kvar av budgeten om varan skulle läggas till.
+Add-metoden i ShoppingList.cs räknar ut om varan får plats i budgeten.
+Om den inte får plats returnerar Add false och Program.cs visar ett felmeddelande med hur stor budgeten är. Annars läggs varan till.
 
-Om den är över budget skickas den till Program.cs bool added som har en if-sats som berättar att man är över budget.
-Annars läggs varan till.
+            if (!list.Add(new Item(name, price)))
+            {
+               Console.WriteLine($"Din budget är: {list.Budget}. Varan du försökte lägga till har inte lagts till, för då är du över budget");
+               Console.ReadLine();
+            }
 
-Jag valde bool då koden blir mindre och jag förstår det och if-satser bäst. Samt att detta är inget riktigt fel, varan är giltig men den får inte plats just nu.
-
-Samma inmatning med en lista med färre varor, så hade det varit rätt. Men även att programmet inte kraschar om varan gör så att användaren går över budget. Utan programmet körs vidare ändå. 
-
-Om jag hade använt throw hade jag behövt ett try/catch block för att inte programmet skulle krascha.
-
-
+Jag valde bool då koden blir mindre och jag förstår det och if-satser bäst. Samt att detta är inget riktigt fel, varan är giltig men den får inte plats just nu. Programmet kraschar inte utan körs vidare ändå. Om jag hade använt throw hade jag behövt ett try/catch block för att inte programmet skulle krascha.
 
 
 

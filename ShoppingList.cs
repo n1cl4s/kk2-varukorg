@@ -110,6 +110,8 @@ class ShoppingList
 
         foreach (string line in lines)
         {
+
+            if (string.IsNullOrWhiteSpace(line)) continue;
             string[] parts = line.Split(';');
 
             if (parts[0] == "budget")
