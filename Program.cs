@@ -44,9 +44,9 @@ while (true)
         {
              // Om det blir mer än budget så läggs inte varan till.
         
-            if (list.Add(new Item(name, price)))
+            if (!list.Add(new Item(name, price)))
             {
-               Console.WriteLine($"Din budget är: {list.Budget}. Varan du försökte lägga till har inte lagts till");
+               Console.WriteLine($"Din budget är: {list.Budget}. Varan du försökte lägga till har inte lagts till, för då är du över budget");
                Console.ReadLine();
             }
         }
