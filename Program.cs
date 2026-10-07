@@ -30,10 +30,9 @@ while (true)
         Console.Write("Namn: ");
         string name = Console.ReadLine();
         Console.Write("Pris: ");
-        bool priceSuccess = int.TryParse(Console.ReadLine(), out int price);
 
         // kollar så inmatning är ett heltal
-        if (priceSuccess == false)
+        if (!int.TryParse(Console.ReadLine(), out int price))
         {
             Console.WriteLine("Felaktig inmatning. Det måste vara ett heltal");
             Console.ReadLine();
@@ -44,9 +43,8 @@ while (true)
         try
         {
              // Om det blir mer än budget så läggs inte varan till.
-            bool added = list.Add(new Item(name, price));
         
-            if (added == false)
+            if (list.Add(new Item(name, price)))
             {
                Console.WriteLine($"Din budget är: {list.Budget}. Varan du försökte lägga till har inte lagts till");
                Console.ReadLine();
